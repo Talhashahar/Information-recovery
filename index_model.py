@@ -2,6 +2,7 @@ import os
 import shutil
 import docx2txt
 import db_model
+import re
 
 ''' configutions '''
 folder_before_index = 'C:\\Users\\talha\\Desktop\\Information-recovery-master\\data\\Original\\'
@@ -28,6 +29,7 @@ def index_files_from_temp_folder():
     for file_name in file_list:
         current_doc_index = db_model.retrive_doc_index_from_db()
         text = file_to_text(file_name)
+        text = remove_signs_from_text(text)
         if text is None:
             continue
         words_dict = parse_test_into_dict(text)
@@ -59,6 +61,8 @@ def file_to_text(file_name):
 def parse_test_into_dict(text):
     unuse_words = db_model.get_unuse_word_from_db()
     words_dict = {}
+    text = text.replace("'", "")
+
     for line in text.split('\n'):
         for word in line.split(' '):
             if (word, ) in unuse_words:
@@ -72,6 +76,34 @@ def parse_test_into_dict(text):
     if '' in words_dict:
         del words_dict['']
     return words_dict
+
+
+def remove_signs_from_text(text):
+    text = text.replace("(", " ")
+    text = text.replace(")", " ")
+    text = text.replace(",", " ")
+    text = text.replace(".", " ")
+    text = text.replace('"', "")
+    text = text.replace("-", " ")
+    text = text.replace("!", " ")
+    text = text.replace("?", " ")
+    text = text.replace("`", "")
+    text = text.replace(":", " ")
+    text = text.replace(";", " ")
+    return text
+
+
+def retrive_data_by_string(query):
+    if '"' in query:
+        quotation = re.findall(r'"([^"]*)"', query)
+        text = re.sub(r'".*?"', '""', query)
+        text = re.sub(' +',' ',text)
+        text = text.replace(" ")
+        word_to_search = text + quotation
+    else:
+        word_to_search = query.split(" ")
+
+
 
 
 if __name__ == '__main__':
