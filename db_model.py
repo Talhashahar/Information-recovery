@@ -26,3 +26,58 @@ def get_unuse_word_from_db():
     return_values = []
     return_values = cursor.fetchall()
     return return_values
+
+
+def init_unuse_words():
+    db = get_connection()
+    cursor = db.cursor()
+    query = "insert into googlev2.unuse_words(term) VALUES ('or'), ('and'), ('if'), ('when'), ('than'), ('what'), ('else'), ('tal');"
+    cursor.execute(query)
+    db.commit()
+
+
+def insert_words_to_db(word, count, doc_id):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("insert into googlev2.term VALUES (%s, %s, %s)")
+    data = (word, count, doc_id)
+    try:
+        cursor.execute(query, data)
+        db.commit()
+    except Exception as e:
+        print 'write to log, failed to get word'
+        db.rollback()
+
+
+
+def retrive_doc_index_from_db():
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("SELECT * FROM googlev2.file_index")
+    try:
+        cursor.execute(query)
+    except Exception as e:
+        print 'write to log, failed to get word'
+    res = cursor.fetchall()
+    return res[0][0]
+
+
+def inc_doc_index():
+    db = get_connection()
+    cursor = db.cursor()
+    current_index = retrive_doc_index_from_db()
+    current_index += 1
+    query = ("""
+            update googlev2.file_index
+            set index_file=%s
+            where index_file=%s
+            """)
+    data = (current_index, current_index-1)
+    try:
+        cursor.execute(query, data)
+        db.commit()
+    except Exception as e:
+        print "write to log, failed to update index count"
+        db.rollback()
+
+
