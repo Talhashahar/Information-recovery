@@ -104,8 +104,6 @@ def retrive_data_by_string(query):
         word_to_search = query.split(" ")
 
 
-
-
 if __name__ == '__main__':
     find_new_files_and_move_temp_folder()
     index_files_from_temp_folder()

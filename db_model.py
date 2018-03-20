@@ -124,3 +124,16 @@ def get_docs_from_single_temp(term_word):
         print 'fail to get docs from db - query OR operator'
     res = cursor.fetchall()
     return res;
+
+
+def get_docs_from_single_term_Not(term_word):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("SELECT * FROM googlev2.term where term!=%s")
+    data = (term_word, )
+    try:
+        cursor.execute(query, data)
+    except Exception as e:
+        print 'fail to get docs from db - query OR operator'
+    res = cursor.fetchall()
+    return res;

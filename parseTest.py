@@ -50,6 +50,7 @@ def get_documents(documents, operands, op):
     doc_list = []
     if len(documents) == 0:
         if op in UNARY:
+            term_list = db_model.get_docs_from_single_term_Not(operands[0])
             # return documents which staisfy !operands[0]
             pass
         else:  # binary
@@ -60,6 +61,7 @@ def get_documents(documents, operands, op):
     else:
         temp_list = db_model.get_docs_from_single_temp(operands[0])
         if op in UNARY:
+            term_list = db_model.get_docs_from_single_term_Not(operands[0])
             # return documents which staisfy !operands[0]
             pass
         else:  # binary
@@ -95,7 +97,7 @@ def compile_term():
 if __name__ == "__main__":
     #zzz = db_model.get_docs_from_single_temp('high')
     #zzz = db_model.get_docs_from_2_temp_with_AND('gingham', 'just')
-    expr = "( ( Cat | dog ) & mouse ) & ! love"
+    expr = "( ( all | love ) & need ) & ! guitar"
     qq = order_query(expr)
     compile_expression(qq)
     pass
