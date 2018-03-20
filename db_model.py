@@ -81,3 +81,46 @@ def inc_doc_index():
         db.rollback()
 
 
+def TEST_get_docs_from_2_temp_with_OR(term1,term2):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("""
+              SELECT * FROM googlev2.term 
+              where term=%s or term=%s
+              """)
+    data = (term1,term2)
+    try:
+        cursor.execute(query, data)
+    except Exception as e:
+        print 'fail to get docs from db - query OR operator'
+    res = cursor.fetchall()
+
+
+def get_docs_from_2_temp_with_OR(term1,term2):
+    term1_result = get_docs_from_single_temp(term1)
+    term2_result = get_docs_from_single_temp(term2)
+    return term1_result+term2_result
+
+
+def get_docs_from_2_temp_with_AND(term1, term2):
+    total_reuslt = []
+    term1_result = get_docs_from_single_temp(term1)
+    term2_result = get_docs_from_single_temp(term2)
+    for x in term1_result:
+        for y in term2_result:
+            if x[2] == y[2]:
+                total_reuslt +=x;
+    return total_reuslt
+
+
+def get_docs_from_single_temp(term_word):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("SELECT * FROM googlev2.term where term=%s")
+    data = (term_word, )
+    try:
+        cursor.execute(query, data)
+    except Exception as e:
+        print 'fail to get docs from db - query OR operator'
+    res = cursor.fetchall()
+    return res;

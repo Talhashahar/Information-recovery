@@ -5,9 +5,9 @@ import db_model
 import re
 
 ''' configutions '''
-folder_before_index = 'C:\\Users\\talha\\Desktop\\Information-recovery-master\\data\\Original\\'
-folder_temp_index = 'C:\\Users\\talha\\Desktop\\Information-recovery-master\\data\\temp\\'
-folder_after_index = 'C:\\Users\\talha\\Desktop\\Information-recovery-master\\data\\indexed\\'
+folder_before_index = 'C:\Information_Retrive\\data\\Original\\'
+folder_temp_index = 'C:\Information_Retrive\\data\\temp\\'
+folder_after_index = 'C:\Information_Retrive\\data\\indexed\\'
 
 
 def find_new_files_and_move_temp_folder():

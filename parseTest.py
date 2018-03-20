@@ -1,40 +1,4 @@
-import re
-from collections import namedtuple
-
-TOKENIZER = re.compile(r"\w+==\w+|&&|\|\||[()]").findall
-
-Node = namedtuple("Node", ["parent", "children"])
-
-
-def syntax_tree(text, tokenizer, brackets):
-    root = cur_node = Node(None, [])
-    stack = []
-    for token in tokenizer(text):
-        if token == brackets["("]:
-            stack.append(token)
-            new_node = Node(cur_node, [])
-            cur_node.children.append(new_node)
-            cur_node = new_node
-        elif token == brackets[")"]:
-            if stack and stack.pop() == brackets[")"]:
-                cur_node = cur_node.parent
-            else:
-                raise Exception("Parse error: unmatched parentheses")
-        else:
-            cur_node.children.append(token)
-
-        if stack:
-            raise Exception("Parse error: unmatched parentheses")
-
-    return root
-
-
-def listify(root):
-    if isinstance(root, Node):
-        return [listify(item) for item in root.children]
-    else:
-        return root
-
+import db_model
 
 def order_query(query):
     precedence = {'!': 3, '&': 2, '|': 1, '(': 0, ')': 0}
@@ -87,7 +51,11 @@ def get_documents(documents, operands, op):
         # return documents which staisfy !operands[0]
         pass
     else:  # binary
-        pass
+        if op == "&":
+            doc_list = db_model.get_docs_from_2_temp_with_AND(operands[0], operands[1])
+        else:
+            doc_list = db_model.get_docs_from_2_temp_with_OR(operands[0],operands[1])
+    return doc_list
 
 
 def compile_expression(query):
@@ -99,7 +67,7 @@ def compile_expression(query):
             operands.append(elem)
         else:  # must be operator (unary or binary)
             op = elem
-            documents = get_documents(documents, operands, op)
+            documents += get_documents(documents, operands, op)
             operands = []
             op = None
     return documents
@@ -110,6 +78,9 @@ def compile_term():
 
 
 if __name__ == "__main__":
-    expr = "((Cat | dog) & mouse) & !love"
+    #zzz = db_model.get_docs_from_single_temp('high')
+    #zzz = db_model.get_docs_from_2_temp_with_AND('gingham', 'just')
+    expr = "( ( Cat | dog ) & mouse ) & ! love"
     qq = order_query(expr)
+    compile_expression(qq)
     pass
