@@ -47,14 +47,29 @@ UNARY = ['!']
 
 
 def get_documents(documents, operands, op):
-    if op in UNARY:
-        # return documents which staisfy !operands[0]
-        pass
-    else:  # binary
-        if op == "&":
-            doc_list = db_model.get_docs_from_2_temp_with_AND(operands[0], operands[1])
-        else:
-            doc_list = db_model.get_docs_from_2_temp_with_OR(operands[0],operands[1])
+    doc_list = []
+    if len(documents) == 0:
+        if op in UNARY:
+            # return documents which staisfy !operands[0]
+            pass
+        else:  # binary
+            if op == "&":
+                doc_list = db_model.get_docs_from_2_temp_with_AND(operands[0], operands[1])
+            else:
+                doc_list = db_model.get_docs_from_2_temp_with_OR(operands[0], operands[1])
+    else:
+        temp_list = db_model.get_docs_from_single_temp(operands[0])
+        if op in UNARY:
+            # return documents which staisfy !operands[0]
+            pass
+        else:  # binary
+            if op == "&":
+                for x in documents:
+                    for y in temp_list:
+                        if x[2]==y[2]:
+                            doc_list += x
+            else:
+                doc_list = temp_list + documents
     return doc_list
 
 
@@ -67,7 +82,7 @@ def compile_expression(query):
             operands.append(elem)
         else:  # must be operator (unary or binary)
             op = elem
-            documents += get_documents(documents, operands, op)
+            documents = get_documents(documents, operands, op)
             operands = []
             op = None
     return documents
