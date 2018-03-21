@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash" rel="stylesheet">
+
+</head>
+<body>
+    <a id="logoff-button" type="button" class="button btn btn-info" href="/">LogOff</a>
+
+<div id = "wrapper">
+    <div id = "container">
+<div id="top">
+    <header><h1> Information Retrieval</h1> </header>
+    <div>
+        {% for doc in docs %}
+            <!-- touple: 0: name 1:brief-->
+            <div class="doc">
+                <h2>Document ID : {{doc[0]}}</h2>
+                <p><b>Document Name : {{doc[1]}}</b></p>
+                <p>{{doc[2]}}</p>
+            </div>
+            {% endfor %}
+    </div>
+</div>
+    <div class="wrap">
+        <h1>Upload new files</h1>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" value="" id="myfile" multiple>
+            <input type="submit" value="Upload file" name="submit">
+        </form>
+    </div>
+    </div>
+</div>
+</body>
+</html>

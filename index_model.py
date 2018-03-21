@@ -30,7 +30,7 @@ def index_files_from_temp_folder():
         current_doc_index = db_model.retrive_doc_index_from_db()
         text = file_to_text(file_name)
         text = remove_signs_from_text(text)
-        db_model.insert_doc_detail(file_name.split('.')[0], current_doc_index, text.split("\n")[0] + " <br> " + text.split("\n")[1])
+        db_model.insert_doc_detail(file_name.split('.')[0], current_doc_index, text.split("\n")[0] + text.split("\n")[1])
         if text is None:
             continue
         words_dict = parse_test_into_dict(text)

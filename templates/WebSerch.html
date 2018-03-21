@@ -9,7 +9,7 @@
 
 </head>
 <body>
-
+<a id="admin-button" type="button" class="btn btn-info btn-md" href="/admin">Admin</a>
 <div id = "wrapper">
     <div id = "container">
 <div id="top">
@@ -24,14 +24,14 @@
                     <i class="fa fa-search"></i>
                 </button>
             </form>
-            <input type="file" id="myFile">
+            <!--<input type="file" id="myFile"> -->
         </div>
         <div id="result" style="display:{{ display }}">
             {% for doc in docs %}
             <!-- touple: 0: name 1:brief-->
             <div class="doc">
-                <p>{{ doc[1] }}</p>
-                <p>{{ doc[2] }}</p>
+                <h2><a target="_blank" href="C:\Information_Retrive\data\indexed\{{doc[0]}}">{{ doc[1] }}</a></h2>
+                <p>{{doc[2]}}</p>
             </div>
             {% endfor %}
         </div>

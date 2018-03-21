@@ -162,4 +162,15 @@ def get_docs_details(doc_id):
     except Exception as e:
         print 'fail to get docs from db - query OR operator'
     res = cursor.fetchall()
+    return res[0];
+
+def get_all_docs_details():
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("SELECT * FROM googlev2.docs")
+    try:
+        cursor.execute(query)
+    except Exception as e:
+        print 'fail to get docs from db - query OR operator'
+    res = cursor.fetchall()
     return res;
