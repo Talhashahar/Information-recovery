@@ -78,16 +78,61 @@ def get_documents(documents, operands, op):
 def compile_expression(query):
     operands = []
     op = None
-    documents = []
-    for elem in query:
+    documents1 = []
+    documents2 = []
+    tempdoc = []
+    totalDocs = []
+    for idx, elem in enumerate(query):
+        if len(query) == 1:
+            return db_model.get_docs_from_single_temp(elem)
+        if elem in UNARY and idx == (len(query) - 1):
+            break
         if elem not in OPERATORS:
             operands.append(elem)
         else:  # must be operator (unary or binary)
             op = elem
-            documents = get_documents(documents, operands, op)
+            if op == '&':
+                if len(totalDocs) != 0:
+                    documents1 = db_model.get_docs_from_single_temp(operands[0])
+                    documents2 = totalDocs
+                else:
+                    documents1 = db_model.get_docs_from_single_temp(operands[0])
+                    documents2 = db_model.get_docs_from_single_temp(operands[1])
+                for x in documents1:
+                    for y in documents2:
+                        if x[2] == y[2]:
+                            tempdoc.append(x)
+                            tempdoc.append(y)
+                totalDocs = tempdoc
+                tempdoc = []
+            elif op == '|':
+                if len(totalDocs) != 0:
+                    totalDocs += db_model.get_docs_from_single_temp(operands[0])
+                else:
+                    totalDocs += db_model.get_docs_from_single_temp(operands[0]) + db_model.get_docs_from_single_temp(operands[1])
+            else:
+                if len(totalDocs) != 0:
+                    documents1 = db_model.get_docs_from_single_term_Not(operands[0])
+                    documents2 = totalDocs
+                else:
+                    documents1 = db_model.get_docs_from_single_term_Not(operands[0])
+                    documents2 = db_model.get_docs_from_single_term_Not(operands[1])
+                secop = query[idx+1]
+                if secop == "&":
+                    for x in documents1:
+                        for y in documents2:
+                            if x[2] == y[2]:
+                                tempdoc.append(x)
+                                tempdoc.append(y)
+                    totalDocs = tempdoc
+                    tempdoc = []
+                else:
+                    totalDocs += documents1
             operands = []
             op = None
-    return documents
+    retrive_docs = list(set(totalDocs))
+    pass
+    return retrive_docs
 
 
 def compile_term():
@@ -97,7 +142,11 @@ def compile_term():
 if __name__ == "__main__":
     #zzz = db_model.get_docs_from_single_temp('high')
     #zzz = db_model.get_docs_from_2_temp_with_AND('gingham', 'just')
-    expr = "( ( all | love ) & need ) & ! guitar"
-    qq = order_query(expr)
-    compile_expression(qq)
+    expr1 = "( ( all | love ) & need ) & ! guitar"
+    expr2 = "( love & guitar )"
+    expr3 = "( love | guitar )"
+    expr4 = "( love & ! guitar )"
+    qq1 = order_query(expr1)
+    qq4 = order_query(expr4)
+    docs_retrive = compile_expression(qq4)
     pass
