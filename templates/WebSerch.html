@@ -18,12 +18,22 @@
 
     <div class="wrap">
         <div class="search">
-            <input type="text" class="searchTerm" placeholder="What are you looking for?">
-            <button type="submit" class="searchButton">
-                <i class="fa fa-search"></i>
-            </button>
-
+            <form action="/search" method="get">
+                <input type="text" class="searchTerm" name="query" placeholder="What are you looking for?">
+                <button type="submit" class="searchButton">
+                    <i class="fa fa-search"></i>
+                </button>
+            </form>
             <input type="file" id="myFile">
+        </div>
+        <div id="result" style="display:{{ display }}">
+            {% for doc in docs %}
+            <!-- touple: 0: name 1:brief-->
+            <div class="doc">
+                <p>{{ doc[1] }}</p>
+                <p>{{ doc[2] }}</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
     </div>

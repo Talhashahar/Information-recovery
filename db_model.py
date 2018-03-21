@@ -137,3 +137,29 @@ def get_docs_from_single_term_Not(term_word):
         print 'fail to get docs from db - query OR operator'
     res = cursor.fetchall()
     return res;
+
+
+def insert_doc_detail(docName, docID, brief):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("insert into googlev2.docs VALUES (%s, %s, %s)")
+    data = (docID, docName, brief)
+    try:
+        cursor.execute(query, data)
+        db.commit()
+    except Exception as e:
+        print 'write to log, failed to get word'
+        db.rollback()
+
+
+def get_docs_details(doc_id):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("SELECT * FROM googlev2.docs where doc_id=%s")
+    data = (doc_id, )
+    try:
+        cursor.execute(query, data)
+    except Exception as e:
+        print 'fail to get docs from db - query OR operator'
+    res = cursor.fetchall()
+    return res;
