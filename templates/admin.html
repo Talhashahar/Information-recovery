@@ -16,14 +16,25 @@
 <div id="top">
     <header><h1> Information Retrieval</h1> </header>
     <div>
-        {% for doc in docs %}
+        <h2 style="text-decoration: underline"><b>Active document</b></h2>
+        {% for doc in Activedocs %}
             <!-- touple: 0: name 1:brief-->
             <div class="doc">
                 <h2>Document ID : {{doc[0]}}</h2>
                 <p><b>Document Name : {{doc[1]}}</b></p>
                 <p>{{doc[2]}}</p>
             </div>
-            {% endfor %}
+        {% endfor %}
+
+        <h2 style="text-decoration: underline"><b>InActive document</b></h2>
+        {% for doc in InActivedocs %}
+            <!-- touple: 0: name 1:brief-->
+            <div class="doc">
+                <h2>Document ID : {{doc[0]}}</h2>
+                <p><b>Document Name : {{doc[1]}}</b></p>
+                <p>{{doc[2]}}</p>
+            </div>
+        {% endfor %}
     </div>
 </div>
     <div class="wrap">

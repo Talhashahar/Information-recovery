@@ -5,9 +5,9 @@ import db_model
 import re
 
 ''' configutions '''
-folder_before_index = 'C:\Information_Retrive\\data\\Original\\'
-folder_temp_index = 'C:\Information_Retrive\\data\\temp\\'
-folder_after_index = 'C:\Information_Retrive\\data\\indexed\\'
+folder_before_index = 'C:\\Users\\talha\\Desktop\\Information-recovery-master\\data\\Original\\'
+folder_temp_index = 'C:\\Users\\talha\\Desktop\\Information-recovery-master\\data\\temp\\'
+folder_after_index = 'C:\\Users\\talha\\Desktop\\Information-recovery-master\\data\\indexed\\'
 
 
 def find_new_files_and_move_temp_folder():
@@ -30,12 +30,12 @@ def index_files_from_temp_folder():
         current_doc_index = db_model.retrive_doc_index_from_db()
         text = file_to_text(file_name)
         text = remove_signs_from_text(text)
-        db_model.insert_doc_detail(file_name.split('.')[0], current_doc_index, text.split("\n")[0] + text.split("\n")[1])
+        db_model.insert_doc_detail(file_name.split('.')[0], current_doc_index, text.split("\n")[0] + " " + text.split("\n")[1], 1)
         if text is None:
             continue
         words_dict = parse_test_into_dict(text)
         for word, count in words_dict.items():
-            db_model.insert_words_to_db(word, count, current_doc_index)
+            db_model.insert_words_to_db(word, count, current_doc_index, 1)
         shutil.move(folder_temp_index + file_name, folder_after_index + "doc_" + str(current_doc_index) + "." + file_name.split(".")[1])
         db_model.inc_doc_index()
 

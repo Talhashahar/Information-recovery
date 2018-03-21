@@ -13,9 +13,9 @@ CORS(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def welcome():
-    data1 = "Text"
-    return render_template('/WebSerch.html', data=data1, display="none")
-    pass
+    index_model.find_new_files_and_move_temp_folder()
+    index_model.index_files_from_temp_folder()
+    return render_template('/WebSerch.html', display="none")
 
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -41,10 +41,9 @@ def search():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    all_docs = db_model.get_all_docs_details()
-    pass
-    return render_template('/admin.html', docs=all_docs)
-    pass
+    ACT = db_model.get_all_Active_docs_details()
+    InACT = db_model.get_all_InActive_docs_details()
+    return render_template('/admin.html', Activedocs=ACT, InActivedocs=InACT)
 
 
 @app.route('/upload', methods=['POST'])
@@ -53,13 +52,11 @@ def upload():
         files = request.files.getlist("file")
         for file in files:
             filename = file.filename
-            stored_files = "C:\Information_Retrive\data\Original\\{}.txt".format(filename)
+            stored_files = "C:\Users\talha\Desktop\Information-recovery-master\data\Original\\{}.txt".format(filename)
             file.save(stored_files)
             index_model.find_new_files_and_move_temp_folder()
             index_model.index_files_from_temp_folder()
         return render_template('admin.html')
-
-
 
 
 if __name__ == '__main__':

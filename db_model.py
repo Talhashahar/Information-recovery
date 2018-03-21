@@ -36,11 +36,11 @@ def init_unuse_words():
     db.commit()
 
 
-def insert_words_to_db(word, count, doc_id):
+def insert_words_to_db(word, count, doc_id, status):
     db = get_connection()
     cursor = db.cursor()
-    query = ("insert into googlev2.term VALUES (%s, %s, %s)")
-    data = (word, count, doc_id)
+    query = ("insert into googlev2.term VALUES (%s, %s, %s, %s)")
+    data = (word, count, doc_id, status)
     try:
         cursor.execute(query, data)
         db.commit()
@@ -139,11 +139,11 @@ def get_docs_from_single_term_Not(term_word):
     return res;
 
 
-def insert_doc_detail(docName, docID, brief):
+def insert_doc_detail(docName, docID, brief, status):
     db = get_connection()
     cursor = db.cursor()
-    query = ("insert into googlev2.docs VALUES (%s, %s, %s)")
-    data = (docID, docName, brief)
+    query = ("insert into googlev2.docs VALUES (%s, %s, %s, %s)")
+    data = (docID, docName, brief, status)
     try:
         cursor.execute(query, data)
         db.commit()
@@ -174,3 +174,70 @@ def get_all_docs_details():
         print 'fail to get docs from db - query OR operator'
     res = cursor.fetchall()
     return res;
+
+def get_all_Active_docs_details():
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("SELECT * FROM googlev2.docs where status=1")
+    try:
+        cursor.execute(query)
+    except Exception as e:
+        print 'fail to get docs from db - query OR operator'
+    res = cursor.fetchall()
+    return res;
+
+def get_all_InActive_docs_details():
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("SELECT * FROM googlev2.docs where status=0")
+    try:
+        cursor.execute(query)
+    except Exception as e:
+        print 'fail to get docs from db - query OR operator'
+    res = cursor.fetchall()
+    return res;
+
+def set_inactive_doc(doc_ID):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("""
+            update googlev2.docs
+            set status=0
+            where doc_id=%s
+            """)
+    query2 = ("""
+            update googlev2.term
+            set status=0
+            where doc=%s
+            """)
+    data = (doc_ID, )
+    try:
+        cursor.execute(query, data)
+        cursor.execute(query2, data)
+        db.commit()
+    except Exception as e:
+        print 'write to log, failed to get word'
+        db.rollback()
+
+
+def set_active_doc(doc_ID):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("""
+            update googlev2.docs
+            set status=1
+            where doc_id=%s
+            """)
+    query2 = ("""
+            update googlev2.term
+            set status=1
+            where doc=%s
+            """)
+    data = (doc_ID, )
+    try:
+        cursor.execute(query, data)
+        cursor.execute(query2, data)
+        db.commit()
+    except Exception as e:
+        print 'write to log, failed to get word'
+        db.rollback()

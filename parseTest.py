@@ -142,11 +142,13 @@ def compile_term():
 if __name__ == "__main__":
     #zzz = db_model.get_docs_from_single_temp('high')
     #zzz = db_model.get_docs_from_2_temp_with_AND('gingham', 'just')
-    expr1 = "( ( all | love ) & need ) & ! guitar"
-    expr2 = "( love & guitar )"
-    expr3 = "( love | guitar )"
-    expr4 = "( love & ! guitar )"
-    qq1 = order_query(expr1)
-    qq4 = order_query(expr4)
-    docs_retrive = compile_expression(qq4)
+    #expr1 = "( ( all | love ) & need ) & ! guitar"
+    #expr2 = "( love & guitar )"
+    #expr3 = "( love | guitar )"
+    #expr4 = "( love & ! guitar )"
+    #qq1 = order_query(expr1)
+    #qq4 = order_query(expr4)
+    #docs_retrive = compile_expression(qq4)
+    #db_model.set_inactive_doc(1)
+    #db_model.set_active_doc(1)
     pass
