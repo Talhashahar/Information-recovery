@@ -83,6 +83,8 @@ def compile_expression(query):
     tempdoc = []
     totalDocs = []
     for idx, elem in enumerate(query):
+        if elem == '':
+            continue
         if len(query) == 1:
             return db_model.get_docs_from_single_temp(elem)
         if elem in UNARY and idx == (len(query) - 1):
@@ -128,10 +130,11 @@ def compile_expression(query):
                     tempdoc = []
                 else:
                     totalDocs += documents1
+                if query[len(query)-1] in OPERATORS and query[len(query)-2] in OPERATORS and idx == (len(query) - 2):
+                    break
             operands = []
             op = None
     retrive_docs = list(set(totalDocs))
-    pass
     return retrive_docs
 
 

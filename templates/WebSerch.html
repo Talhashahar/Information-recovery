@@ -26,11 +26,12 @@
             </form>
             <!--<input type="file" id="myFile"> -->
         </div>
+        <br><br>
         <div id="result" style="display:{{ display }}">
             {% for doc in docs %}
             <!-- touple: 0: name 1:brief-->
             <div class="doc">
-                <h2><a target="_blank" href="C:\Information_Retrive\data\indexed\{{doc[0]}}">{{ doc[1] }}</a></h2>
+                <h2><a target="_blank" href="/documents/{{doc[0]}}">{{ doc[1] }}</a></h2>
                 <p>{{doc[2]}}</p>
             </div>
             {% endfor %}

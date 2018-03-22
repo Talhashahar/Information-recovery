@@ -12,14 +12,12 @@ html, body, #wrapper
     background-repeat: no-repeat;
     background-size: auto;
 }
-
+.wrap h1{
+    color: green;
+}
 
 .wrap{
-    width: 30%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+padding-top: 10px;
 }
 .search {
     width: 100%;
@@ -59,11 +57,10 @@ header{
 }
 h1{
     text-align: center;
-    color: yellow;
+    color: blue;
     font-family: 'Berkshire Swash', cursive;
     font-size: 30px;
     font-weight: bold;
     margin-top: -8px;
     padding-top: 3%;
-
 }

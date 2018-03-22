@@ -12,15 +12,23 @@
     <a id="logoff-button" type="button" class="button btn btn-info" href="/">LogOff</a>
 
 <div id = "wrapper">
+     <header><h1> Information Retrieval<br> Admin Management</h1> </header>
     <div id = "container">
-<div id="top">
-    <header><h1> Information Retrieval</h1> </header>
+            <div class="wrap">
+        <h1>Upload new files</h1>
+        <form style="padding-left: 35%;" action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" value="" id="myfile" multiple>
+            <input type="submit" value="Upload file" name="submit">
+        </form>
+    </div>
+<div id="top" style="    width: 41%; margin: 0 auto; padding-top: 50px;">
+
     <div>
         <h2 style="text-decoration: underline"><b>Active document</b></h2>
         {% for doc in Activedocs %}
             <!-- touple: 0: name 1:brief-->
             <div class="doc">
-                <h2>Document ID : {{doc[0]}}</h2>
+                <h2><a target="_blank" href="/changeStatus/{{doc[0]}}">Document ID : {{doc[0]}}</a></h2>
                 <p><b>Document Name : {{doc[1]}}</b></p>
                 <p>{{doc[2]}}</p>
             </div>
@@ -30,20 +38,14 @@
         {% for doc in InActivedocs %}
             <!-- touple: 0: name 1:brief-->
             <div class="doc">
-                <h2>Document ID : {{doc[0]}}</h2>
+                <h2><a target="_blank" href="/changeStatus/{{doc[0]}}">Document ID : {{doc[0]}}</a></h2>
                 <p><b>Document Name : {{doc[1]}}</b></p>
                 <p>{{doc[2]}}</p>
             </div>
         {% endfor %}
     </div>
 </div>
-    <div class="wrap">
-        <h1>Upload new files</h1>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" value="" id="myfile" multiple>
-            <input type="submit" value="Upload file" name="submit">
-        </form>
-    </div>
+
     </div>
 </div>
 </body>

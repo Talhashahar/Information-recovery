@@ -116,7 +116,7 @@ def get_docs_from_2_temp_with_AND(term1, term2):
 def get_docs_from_single_temp(term_word):
     db = get_connection()
     cursor = db.cursor()
-    query = ("SELECT * FROM googlev2.term where term=%s")
+    query = ("SELECT * FROM googlev2.term where term=%s and status=1")
     data = (term_word, )
     try:
         cursor.execute(query, data)
@@ -241,3 +241,16 @@ def set_active_doc(doc_ID):
     except Exception as e:
         print 'write to log, failed to get word'
         db.rollback()
+
+
+def get_doc_status(doc_ID):
+    db = get_connection()
+    cursor = db.cursor()
+    query = ("SELECT * FROM googlev2.docs where doc_id=%s")
+    data = (doc_ID, )
+    try:
+        cursor.execute(query, data)
+    except Exception as e:
+        print 'fail to get docs from db - query OR operator'
+    res = cursor.fetchall()
+    return res[0];
